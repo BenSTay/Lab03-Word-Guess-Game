@@ -25,12 +25,29 @@ namespace GuessingGame
             return File.ReadAllLines(filepath);
         }
 
-        public static void WriteWord(string word)
+        public static bool WriteWord(string word)
         {
+            if (File.Exists(filepath))
+            {
+                string[] words = ReadWords();
+                for (int i = 0; i < words.Length; i++)
+                {
+                    if (words[i] == word)
+                    {
+                        return false;
+                    }
+                }
+            }
             using (StreamWriter w = File.AppendText(filepath))
             {
                 w.WriteLine(word);
             }
+            return true;
+        }
+
+        public static void DeleteWords()
+        {
+            File.Delete(filepath);
         }
 
         static void Main(string[] args)
