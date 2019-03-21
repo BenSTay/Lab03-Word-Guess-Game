@@ -79,5 +79,23 @@ namespace GuessingGameTests
             GuessingGame.Program.UpdateKnownLetters(knownletters, positions);
             Assert.True(knownletters[1] && knownletters[2]);
         }
+
+        [Fact]
+        public void CanUpdateGuesses()
+        {
+            string guesses = "";
+            char guess = 'e';
+            guesses = GuessingGame.Program.UpdateGuesses(guesses, guess);
+            Assert.Equal("e", guesses);
+        }
+
+        [Fact]
+        public void CantGuessSameLetterTwice()
+        {
+            string guesses = "e";
+            char guess = 'e';
+            guesses = GuessingGame.Program.UpdateGuesses(guesses, guess);
+            Assert.Equal("e", guesses);
+        }
     }
 }

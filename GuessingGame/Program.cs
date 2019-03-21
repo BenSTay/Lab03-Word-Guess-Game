@@ -81,6 +81,12 @@ namespace GuessingGame
             return knownletters;
         }
 
+        public static string UpdateGuesses(string guesses, char letter)
+        {
+            if (!guesses.Contains(letter)) guesses += letter;
+            return guesses;
+        }
+
         static void Main(string[] args)
         {
             GetLetterPositions("bacon", 'z');
