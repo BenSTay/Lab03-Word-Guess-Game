@@ -50,8 +50,31 @@ namespace GuessingGame
             File.Delete(filepath);
         }
 
+        public static int[] GetLetterPositions(string word, char letter)
+        {
+            char[] wordchars = word.ToCharArray();
+            string positions = "";
+            for (int i = 0; i < wordchars.Length; i++)
+            {
+                if (wordchars[i] == letter) positions += $"{(positions.Length == 0 ? "" : ",")}{i}";
+            }
+            int[] result;
+            if (positions != "")
+            {
+                string[] splitpositions = positions.Split(',');
+                result = new int[splitpositions.Length];
+                for (int i = 0; i < result.Length; i++)
+                {
+                    result[i] = Int32.Parse(splitpositions[i]);
+                }
+            }
+            else result = new int[0];
+            return result;
+        }
+
         static void Main(string[] args)
         {
+            GetLetterPositions("bacon", 'z');
             Console.WriteLine("Hello World!");
         }
     }

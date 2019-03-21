@@ -52,5 +52,23 @@ namespace GuessingGameTests
             GuessingGame.Program.DeleteWords();
             Assert.False(File.Exists(GuessingGame.Program.filepath));
         }
+
+        [Fact]
+        public void CanGetLetterPositions()
+        {
+            string word = "bacon";
+            char guess = 'c';
+            int[] positions = GuessingGame.Program.GetLetterPositions(word, guess);
+            Assert.Equal(2, positions[0]);
+        }
+
+        [Fact]
+        public void GetLetterPositionsReturnsEmptyArrayIfLetterNotFound()
+        {
+            string word = "bacon";
+            char guess = 'z';
+            int[] positions = GuessingGame.Program.GetLetterPositions(word, guess);
+            Assert.Empty(positions);
+        }
     }
 }
