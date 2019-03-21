@@ -22,7 +22,15 @@ namespace GuessingGameTests
             if (File.Exists(GuessingGame.Program.filepath)) File.Delete(GuessingGame.Program.filepath);
             string[] filewords = GuessingGame.Program.ReadWords();
             Assert.NotEmpty(filewords);
+        }
 
+        [Fact]
+        public void CanWriteWord()
+        {
+            if (File.Exists(GuessingGame.Program.filepath)) File.Delete(GuessingGame.Program.filepath);
+            GuessingGame.Program.WriteWord("contemporaneous");
+            string[] filewords = File.ReadAllLines(GuessingGame.Program.filepath);
+            Assert.Equal("contemporaneous", filewords[0]);
         }
     }
 }

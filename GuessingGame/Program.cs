@@ -25,6 +25,14 @@ namespace GuessingGame
             return File.ReadAllLines(filepath);
         }
 
+        public static void WriteWord(string word)
+        {
+            using (StreamWriter w = File.AppendText(filepath))
+            {
+                w.WriteLine(word);
+            }
+        }
+
         static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
