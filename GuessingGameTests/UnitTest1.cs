@@ -70,5 +70,14 @@ namespace GuessingGameTests
             int[] positions = GuessingGame.Program.GetLetterPositions(word, guess);
             Assert.Empty(positions);
         }
+
+        [Fact]
+        public void CanUpdateKnownLetters()
+        {
+            bool[] knownletters = new bool[5];
+            int[] positions = new int[] { 1, 2 };
+            GuessingGame.Program.UpdateKnownLetters(knownletters, positions);
+            Assert.True(knownletters[1] && knownletters[2]);
+        }
     }
 }

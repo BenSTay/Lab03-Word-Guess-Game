@@ -72,6 +72,15 @@ namespace GuessingGame
             return result;
         }
 
+        public static bool[] UpdateKnownLetters(bool[] knownletters, int[] positions)
+        {
+            for (int i = 0; i < positions.Length; i++)
+            {
+                knownletters[positions[i]] = true;
+            }
+            return knownletters;
+        }
+
         static void Main(string[] args)
         {
             GetLetterPositions("bacon", 'z');
