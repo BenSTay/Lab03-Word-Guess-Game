@@ -1,11 +1,13 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 
 namespace GuessingGame
 {
     public class Program
     {
-        public static readonly string filepath = "../../../../words.txt";
+        public static readonly string filepath = "../../../words.txt";
+        static Random rng = new Random();
 
         public static string[] ReadWords()
         {
@@ -53,15 +55,15 @@ namespace GuessingGame
         public static int[] GetLetterPositions(string word, char letter)
         {
             char[] wordchars = word.ToCharArray();
-            string positions = "";
+            StringBuilder positions = new StringBuilder();
             for (int i = 0; i < wordchars.Length; i++)
             {
-                if (wordchars[i] == letter) positions += $"{(positions.Length == 0 ? "" : ",")}{i}";
+                if (wordchars[i] == letter) positions.Append($"{(positions.Length == 0 ? "" : ",")}{i}");
             }
             int[] result;
-            if (positions != "")
+            if (positions.Length != 0)
             {
-                string[] splitpositions = positions.Split(',');
+                string[] splitpositions = positions.ToString().Split(',');
                 result = new int[splitpositions.Length];
                 for (int i = 0; i < result.Length; i++)
                 {
@@ -81,16 +83,128 @@ namespace GuessingGame
             return knownletters;
         }
 
-        public static string UpdateGuesses(string guesses, char letter)
+        public static bool HasLetter(string guesses, char letter)
         {
-            if (!guesses.Contains(letter)) guesses += letter;
-            return guesses;
+            return guesses.Contains(letter);
+        }
+
+        static void DrawMenu()
+        {
+            Console.Clear();
+            Console.WriteLine("Welcome to WordGuess!\n");
+            Console.WriteLine("1) Play Game");
+            Console.WriteLine("2) Add Word");
+            Console.WriteLine("3) Reset Words");
+            Console.WriteLine("4) Quit\n");
+        }
+
+        //TODO: Write test(s)
+        public static bool WordOnlyContainsLetters(string word)
+        {
+            for (int i = 0; i < word.Length; i++)
+            {
+                if (!Char.IsLetter(word, i)) return false;
+            }
+            return true;
+        }
+
+        public static char GetLetter()
+        {
+            string input;
+            bool invalidinput = true;
+            do
+            {
+                Console.Write("\nPick a letter: ");
+                input = Console.ReadLine();
+                if (input.Length != 1) Console.WriteLine("Please enter exactly one letter.");
+                else if (!WordOnlyContainsLetters(input)) Console.WriteLine("Numbers and punctuation are not accepted. Please try again.");
+                else invalidinput = false;
+
+            } while (invalidinput);
+            return input.ToCharArray()[0];
+        }
+
+        //TODO: Write test(s)
+        public static bool AllLettersKnown(bool[] knownletters)
+        {
+            for (int i = 0; i < knownletters.Length; i++)
+            {
+                if (!knownletters[i]) return false;
+            }
+            return true;
+        }
+
+        //TODO: Write tests(s)
+        public static string FormatWord(string word, bool[] knownletters)
+        {
+            char[] letters = word.ToCharArray();
+            StringBuilder wordbuilder = new StringBuilder();
+            for (int i = 0; i < word.Length; i++)
+            {
+                wordbuilder.Append($"{(knownletters[i] ? letters[i] : '_')} ");
+            }
+            return wordbuilder.ToString();
+        }
+
+        static void DisplayGame(string word, bool[] knownletters, string guesses)
+        {
+            Console.Clear();
+            Console.WriteLine("Guess The Word!\n");
+            Console.WriteLine(FormatWord(word, knownletters));
+            Console.WriteLine($"\nYour guesses: {guesses}");
+        }
+
+        static void Play()
+        {
+            string[] words = ReadWords();
+            string word = words[rng.Next(words.Length)];
+            bool[] knownletters = new bool[word.Length];
+            char letter;
+            int[] positions;
+            StringBuilder guesses = new StringBuilder();
+            do
+            {
+                DisplayGame(word, knownletters, guesses.ToString());
+                letter = GetLetter();
+                if (!HasLetter(guesses.ToString(), letter))
+                {
+                    positions = GetLetterPositions(word, letter);
+                    knownletters = UpdateKnownLetters(knownletters, positions);
+                    guesses.Append(letter);
+                }
+            } while (!AllLettersKnown(knownletters));
+
+            DisplayGame(word, knownletters, guesses.ToString());
+            Console.WriteLine("\nYou got it!");
+            Console.WriteLine("Press any key to continue...");
+            Console.ReadKey();
+        }
+
+        static bool Game()
+        {
+            Console.Write("> ");
+            string input = Console.ReadLine();
+            switch (input)
+            {
+                case "1":
+                    Play();
+                    break;
+                case "2":
+                    break;
+                case "3":
+                    break;
+                case "4":
+                    return false;
+            }
+            return true;
         }
 
         static void Main(string[] args)
         {
-            GetLetterPositions("bacon", 'z');
-            Console.WriteLine("Hello World!");
+            do
+            {
+                DrawMenu();
+            } while (Game());
         }
     }
 }

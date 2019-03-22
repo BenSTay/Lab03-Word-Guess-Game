@@ -1,6 +1,7 @@
 using System;
 using Xunit;
 using System.IO;
+using System.Text;
 
 namespace GuessingGameTests
 {
@@ -81,21 +82,21 @@ namespace GuessingGameTests
         }
 
         [Fact]
-        public void CanUpdateGuesses()
+        public void StringHasLetter()
         {
-            string guesses = "";
+            StringBuilder guesses = new StringBuilder("green");
             char guess = 'e';
-            guesses = GuessingGame.Program.UpdateGuesses(guesses, guess);
-            Assert.Equal("e", guesses);
+            bool result = GuessingGame.Program.HasLetter(guesses.ToString(), guess);
+            Assert.True(result);
         }
 
         [Fact]
-        public void CantGuessSameLetterTwice()
+        public void StringDoesntHaveLetter()
         {
-            string guesses = "e";
+            StringBuilder guesses = new StringBuilder();
             char guess = 'e';
-            guesses = GuessingGame.Program.UpdateGuesses(guesses, guess);
-            Assert.Equal("e", guesses);
+            bool result = GuessingGame.Program.HasLetter(guesses.ToString(), guess);
+            Assert.False(result);
         }
     }
 }
