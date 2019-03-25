@@ -11,6 +11,10 @@ namespace GuessingGame
 
         // CRUD Methods
 
+        /// <summary>
+        /// Creates a text file with default words.
+        /// </summary>
+        /// <returns>The default words.</returns>
         public static string[] InitializeWords()
         {
             string[] words = new string[]
@@ -27,9 +31,9 @@ namespace GuessingGame
         }
 
         /// <summary>
-        /// 
+        /// Gets all the words in words.txt
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The words in words.txt</returns>
         public static string[] ReadWords()
         {
             if (!File.Exists(filepath)) return InitializeWords();
@@ -39,10 +43,10 @@ namespace GuessingGame
         }
 
         /// <summary>
-        /// 
+        /// Adds a word to words.txt
         /// </summary>
-        /// <param name="word"></param>
-        /// <returns></returns>
+        /// <param name="word">The word being added.</param>
+        /// <returns>true if the word is added, else false.</returns>
         public static bool WriteWord(string word)
         {
             if (File.Exists(filepath))
@@ -64,16 +68,13 @@ namespace GuessingGame
         }
 
         /// <summary>
-        /// 
+        /// Removes the word at the given index from words.txt
         /// </summary>
-        public static void DeleteWords()
-        {
-            File.Delete(filepath);
-        }
-
+        /// <param name="index">The index of the word being deleted.</param>
         static void RemoveWordFromFile(int index)
         {
             string[] words = ReadWords();
+            if (index >= words.Length) return;
             using (StreamWriter sw = File.CreateText(filepath))
             {
                 for (int i = 0; i < words.Length; i++)
@@ -86,7 +87,7 @@ namespace GuessingGame
         // Guessing Game Methods
 
         /// <summary>
-        /// 
+        /// Handles the guessing game.
         /// </summary>
         static void Play()
         {
@@ -101,7 +102,8 @@ namespace GuessingGame
             {
                 DisplayGame(word, knownletters, guesses.ToString());
                 letter = GetLetter();
-                if (!HasLetter(guesses.ToString(), letter))
+                
+                if (!guesses.ToString().Contains(letter))
                 {
                     positions = GetLetterPositions(word, letter);
                     knownletters = UpdateKnownLetters(knownletters, positions);
@@ -116,11 +118,11 @@ namespace GuessingGame
         }
 
         /// <summary>
-        /// 
+        /// Finds the positions of letters in a word that match a given letter.
         /// </summary>
-        /// <param name="word"></param>
-        /// <param name="letter"></param>
-        /// <returns></returns>
+        /// <param name="word">The word being checked.</param>
+        /// <param name="letter">The letter being searched for.</param>
+        /// <returns>An array with all of the indexes where the letter appears in the word.</returns>
         public static int[] GetLetterPositions(string word, char letter)
         {
             char[] wordchars = word.ToCharArray();
@@ -144,11 +146,11 @@ namespace GuessingGame
         }
 
         /// <summary>
-        /// 
+        /// Flags the given letter positions as correctly guessed.
         /// </summary>
-        /// <param name="knownletters"></param>
-        /// <param name="positions"></param>
-        /// <returns></returns>
+        /// <param name="knownletters">The array of letter position flags.</param>
+        /// <param name="positions">The letter positions being set to true.</param>
+        /// <returns>The updated array of known positions.</returns>
         public static bool[] UpdateKnownLetters(bool[] knownletters, int[] positions)
         {
             for (int i = 0; i < positions.Length; i++)
@@ -159,22 +161,10 @@ namespace GuessingGame
         }
 
         /// <summary>
-        /// 
+        /// Checks if all of the letters have been guessed.
         /// </summary>
-        /// <param name="guesses"></param>
-        /// <param name="letter"></param>
-        /// <returns></returns>
-        public static bool HasLetter(string guesses, char letter)
-        {
-            return guesses.Contains(letter);
-        }
-
-        //TODO: Write test(s)
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="knownletters"></param>
-        /// <returns></returns>
+        /// <param name="knownletters">The array of letter position flags.</param>
+        /// <returns>true if all letter position flags are marked true, else false.</returns>
         public static bool AllLettersKnown(bool[] knownletters)
         {
             for (int i = 0; i < knownletters.Length; i++)
@@ -184,7 +174,12 @@ namespace GuessingGame
             return true;
         }
 
-        //TODO: Write test(s)
+        /// <summary>
+        /// Formats a word so that letters that haven't been guessed yet are blanked out.
+        /// </summary>
+        /// <param name="word">The word being formatted</param>
+        /// <param name="knownletters">The array of letter position flags.</param>
+        /// <returns>The formatted string.</returns>
         public static string FormatWord(string word, bool[] knownletters)
         {
             char[] letters = word.ToCharArray();
@@ -196,13 +191,11 @@ namespace GuessingGame
             return wordbuilder.ToString();
         }
 
-
-        //TODO: Write test(s)
         /// <summary>
-        /// 
+        /// Checks to see if a word contains numbers or punctuation.
         /// </summary>
-        /// <param name="word"></param>
-        /// <returns></returns>
+        /// <param name="word">The word being checked.</param>
+        /// <returns>true if all characters in the word are letters, else false.</returns>
         public static bool WordOnlyContainsLetters(string word)
         {
             for (int i = 0; i < word.Length; i++)
@@ -213,9 +206,9 @@ namespace GuessingGame
         }
 
         /// <summary>
-        /// 
+        /// Gets a single character from user input.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The character entered by the user.</returns>
         public static char GetLetter()
         {
             string input;
@@ -235,11 +228,11 @@ namespace GuessingGame
         // UI Methods
 
         /// <summary>
-        /// 
+        /// Displays the game UI.
         /// </summary>
-        /// <param name="word"></param>
-        /// <param name="knownletters"></param>
-        /// <param name="guesses"></param>
+        /// <param name="word">The word being guessed.</param>
+        /// <param name="knownletters">The array of letter position flags.</param>
+        /// <param name="guesses">All of the users previous guesses.</param>
         static void DisplayGame(string word, bool[] knownletters, string guesses)
         {
             Console.Clear();
@@ -248,6 +241,9 @@ namespace GuessingGame
             Console.WriteLine($"\nYour guesses: {guesses}");
         }
 
+        /// <summary>
+        /// Displays the admin menu.
+        /// </summary>
         static void DrawAdmin()
         {
             Console.Clear();
@@ -260,7 +256,7 @@ namespace GuessingGame
         }
 
         /// <summary>
-        /// 
+        /// Displays the main menu.
         /// </summary>
         static void DrawMenu()
         {
@@ -271,7 +267,9 @@ namespace GuessingGame
             Console.WriteLine("3) Quit\n");
         }
 
-        //TODO: warn player before deleting file, write confirmatory message after completion.
+        /// <summary>
+        /// Makes sure the user really wants to reset words.txt, and resets words.txt if the user enters 'y'.
+        /// </summary>
         static void ResetWords()
         {
             Console.Write("WARNING: Words will be reset to default. Are you sure? (y/n): ");
@@ -286,7 +284,9 @@ namespace GuessingGame
             Console.ReadKey();
         }
 
-        //TODO: get valid word (lowercase!) from user input, 
+        /// <summary>
+        /// Adds a word to words.txt from user input.
+        /// </summary>
         static void AddWord()
         {
             Console.Write("\nEnter your new word: ");
@@ -302,6 +302,9 @@ namespace GuessingGame
             Console.ReadKey();
         }
 
+        /// <summary>
+        /// Displays all of the words in words.txt.
+        /// </summary>
         static void ListWords()
         {
             string[] words = ReadWords();
@@ -311,6 +314,9 @@ namespace GuessingGame
             }
         }
 
+        /// <summary>
+        /// Presents all of the words in words.txt to the user.
+        /// </summary>
         static void ViewWords()
         {
             Console.Clear();
@@ -320,6 +326,10 @@ namespace GuessingGame
             Console.ReadKey();
         }
 
+        /// <summary>
+        /// Lists all of the words in words.txt, and then asks the user which word to remove.
+        /// The word at the chosen position in the list will be removed from words.txt.
+        /// </summary>
         static void RemoveWord()
         {
             Console.Clear();
@@ -333,10 +343,14 @@ namespace GuessingGame
                 Console.WriteLine("Removed.");
             }
             else Console.WriteLine("Invalid input.");
-            Console.WriteLine("Press any key to continue...");
+            Console.WriteLine("\nPress any key to continue...");
             Console.ReadKey();
         }
 
+        /// <summary>
+        /// Handles the admin menu interaction.
+        /// </summary>
+        /// <returns>true until the user chooses to return to the main menu.</returns>
         static bool Admin()
         {
             Console.Write("> ");
@@ -362,9 +376,9 @@ namespace GuessingGame
         }
 
         /// <summary>
-        /// 
+        /// Handles the main menu interaction.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>true until the user chooses to exit the game.</returns>
         static bool Game()
         {
             Console.Write("> ");

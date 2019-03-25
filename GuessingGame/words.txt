@@ -3,3 +3,7 @@ party
 animal
 desire
 feature
+charismatic
+definition
+revolting
+phonetic

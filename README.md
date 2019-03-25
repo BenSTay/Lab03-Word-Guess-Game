@@ -14,7 +14,9 @@ A command-line word guessing game.
 
 ## Using The Application
 ![Screenshot](./assets/screenshot.webp)
-1. Upon starting the application...
+1. Upon starting the application, you will be greeted by the main menu. Pressing 1 here will start the game, pressing 2 will take you to the admin menu, and pressing 3 will exit the application.
+2. When you start the game, you will see multiple blanked out letters, and the game will prompt you to guess a letter. Enter a letter, and if your letter is in the word it will be un-blanked. The game will also keep track of the letters you have already guessed. The game ends when all of the letters have been un-blanked.
+3. In the admin menu, you can view all of the words in the game, and you can modify that list by adding and removing words. The user can also return the word list to a default state here.
 
 ## Architecture
 **Languages Used**:

@@ -45,16 +45,6 @@ namespace GuessingGameTests
         }
 
         [Fact]
-        public void CanDeleteFile()
-        {
-            if (File.Exists(GuessingGame.Program.filepath)) File.Delete(GuessingGame.Program.filepath);
-            string[] words = new string[] { "Pink", "Flamingo" };
-            File.WriteAllLines(GuessingGame.Program.filepath, words);
-            GuessingGame.Program.DeleteWords();
-            Assert.False(File.Exists(GuessingGame.Program.filepath));
-        }
-
-        [Fact]
         public void CanGetLetterPositions()
         {
             string word = "bacon";
@@ -81,22 +71,6 @@ namespace GuessingGameTests
             Assert.True(knownletters[1] && knownletters[2]);
         }
 
-        [Fact]
-        public void StringHasLetter()
-        {
-            StringBuilder guesses = new StringBuilder("green");
-            char guess = 'e';
-            bool result = GuessingGame.Program.HasLetter(guesses.ToString(), guess);
-            Assert.True(result);
-        }
 
-        [Fact]
-        public void StringDoesntHaveLetter()
-        {
-            StringBuilder guesses = new StringBuilder();
-            char guess = 'e';
-            bool result = GuessingGame.Program.HasLetter(guesses.ToString(), guess);
-            Assert.False(result);
-        }
     }
 }
