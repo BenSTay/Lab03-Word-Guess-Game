@@ -25,4 +25,4 @@ A command-line word guessing game.
 Written with Visual Studio Community 2017.
 
 ## Change Log
-* [DATETIME] - [CHANGE]
+* 24-03-2019 9:48PM - Initial Version.
